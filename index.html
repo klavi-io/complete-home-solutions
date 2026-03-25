@@ -303,6 +303,24 @@
     outline: none; border-color: var(--gold); box-shadow: 0 0 0 3px var(--gold-glow);
   }
 
+  /* Pill selector */
+  .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .pill-option {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 10px 18px; border-radius: 50px; cursor: pointer;
+    font-family: 'Outfit', sans-serif; font-size: 14px; font-weight: 500;
+    border: 1.5px solid var(--sand); background: var(--cream); color: var(--text-secondary);
+    transition: all 0.2s; user-select: none; -webkit-user-select: none;
+  }
+
+  .pill-option:hover { border-color: var(--gold-soft); color: var(--navy); }
+
+  .pill-option.selected {
+    background: var(--navy); color: var(--white);
+    border-color: var(--navy); font-weight: 600;
+  }
+
   .form-group input::placeholder { color: var(--text-muted); }
 
   .submit-btn {
@@ -508,15 +526,15 @@
             <input type="text" id="zip" placeholder="95630" required inputmode="numeric" maxlength="5" autocomplete="postal-code">
           </div>
           <div class="form-group">
-            <label for="service">Service Needed</label>
-            <select id="service" required>
-              <option value="" disabled selected>Select a service</option>
-              <option value="HVAC">HVAC</option>
-              <option value="Roofing">Roofing</option>
-              <option value="Plumbing">Plumbing</option>
-              <option value="Landscaping">Landscaping</option>
-              <option value="Other">Other / Not Sure</option>
-            </select>
+            <label>Service Needed</label>
+            <input type="hidden" id="service" value="">
+            <div class="pill-group" id="servicePills">
+              <span class="pill-option" data-value="HVAC">❄️ HVAC</span>
+              <span class="pill-option" data-value="Roofing">🏠 Roofing</span>
+              <span class="pill-option" data-value="Plumbing">🔧 Plumbing</span>
+              <span class="pill-option" data-value="Landscaping">🌿 Landscaping</span>
+              <span class="pill-option" data-value="Other">Other</span>
+            </div>
           </div>
           <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
             Book My Free Evaluation
@@ -543,6 +561,15 @@
   const SUPABASE_URL = 'https://egkeunkdvkulqjywfyyk.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_uoTiLD73apY2DNgzkHBUrA_o7VITOoW';
   const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Pill selector
+  document.getElementById('servicePills').addEventListener('click', function(e) {
+    const pill = e.target.closest('.pill-option');
+    if (!pill) return;
+    this.querySelectorAll('.pill-option').forEach(p => p.classList.remove('selected'));
+    pill.classList.add('selected');
+    document.getElementById('service').value = pill.dataset.value;
+  });
 
   // Phone formatting
   document.getElementById('phone').addEventListener('input', function(e) {
