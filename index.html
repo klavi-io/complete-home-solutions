@@ -542,7 +542,7 @@
 <script>
   const SUPABASE_URL = 'https://egkeunkdvkulqjywfyyk.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_uoTiLD73apY2DNgzkHBUrA_o7VITOoW';
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   // Phone formatting
   document.getElementById('phone').addEventListener('input', function(e) {
@@ -573,7 +573,7 @@
     btn.textContent = 'Submitting...';
 
     try {
-      const { error } = await supabase
+      const { error } = await supabaseClient
         .from('chs_leads')
         .insert({ name, phone: phone.replace(/\D/g, ''), zip, service, source: 'flyer' });
       if (error) throw error;
